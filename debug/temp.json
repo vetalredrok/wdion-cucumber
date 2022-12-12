@@ -1,0 +1,16 @@
+[
+  {
+    "lastName": "Smith",
+    "firstName": "John",
+    "email": "jsmith@gmail.com",
+    "due": "$50.00",
+    "web": "http://www.jsmith.com"
+  },
+  {
+    "lastName": "Doe",
+    "firstName": "Jason",
+    "email": "jdoe@hotmail.com",
+    "due": "$100.00",
+    "web": "http://www.jdoe.com"
+  }
+]

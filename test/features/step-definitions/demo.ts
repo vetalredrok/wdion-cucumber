@@ -1,10 +1,17 @@
 import {Given, When, Then} from "@wdio/cucumber-framework";
 import chai from 'chai';
+const fs = require('node:fs');
 
 
 Given(/^Google page is opened$/, async function () {
     await browser.url('https://www.google.com');
     await browser.pause(1000);
+
+    // console.log(`>> Browser: ${JSON.stringify(browser)}`);
+
+    // fs.writeFile('./data/sample/browserObj.json', JSON.stringify(browser), err => {
+    //     console.log(err, 'ERR')
+    // })
 
 });
 When(/^I agree to the cookie policy$/, async function () {
@@ -17,6 +24,12 @@ Then(/^Search with (.*)$/, async function (searchItem) {
     let ele = await $(`[name=q]`);
     await ele.setValue(searchItem);
     await browser.keys('Enter');
+
+    // console.log(`>> ELEMENT OBJECT: ${JSON.stringify(ele)}`)
+
+    // fs.writeFile('./data/sample/elementObj.json', JSON.stringify(ele), err => {
+    //     console.log(err, 'ERR')
+    // })
 });
 
 Then(/^Click on the first search result$/, async function (){
@@ -24,15 +37,20 @@ Then(/^Click on the first search result$/, async function (){
     await ele.click()
 });
 
+
+
 Then(/^URL should match (.*)$/, async function (expectedURL){
     console.log(`>> expectedURL: ${expectedURL}`);
+    await browser.waitUntil(async () => {
+        return await browser.getTitle() === 'WebdriverIO · Next-gen browser and mobile automation test framework for Node.js | WebdriverIO';
+    }, {timeout: 20000, interval: 500, timeoutMsg: 'Failed loading WDIO web page'})
     let url = await browser.getUrl();
     chai.expect(url).to.equal(expectedURL);
 });
 
 //Web interactions //INPUTS
 Given(/^A web page is opened$/, async function (){
-    await browser.url('/');
+    await browser.url('https://www.amazon.com');
     await browser.setTimeout({implicit: 15000, pageLoad: 10000});
     await browser.maximizeWindow();
 });
@@ -222,8 +240,126 @@ When(/^Perform web interactions$/, async function (){
      * scroll basic
      */
 
-    await $('span=Top Sellers in Books for you').scrollIntoView();
+    // await $('span=Top Sellers in Books for you').scrollIntoView();
 
+    /**
+     * Web TABLE ТАБЛИЦЯ
+     * What are going to cover:
+     * 1. Check number of rows and colums
+     * 2. Get whole table data
+     * 3. Get single row [based on a condition]
+     * 4. Get single column
+     * 5. Get single cell value [based on another cell]
+     */
+
+    /** 1. Check number of rows and colums */
+
+    // const rowCount = await $$('//*[@id="table1"]/tbody/tr').length;
+    // chai.expect(rowCount).to.equal(4);
+    //
+    // console.log('>> Number of rows: '+ rowCount);
+    //
+    //
+    // const colCount = await $$('//*[@id="table1"]/thead/tr/th').length;
+    // chai.expect(colCount).to.equal(6);
+    //
+    // console.log('>> Number of colCount: '+ colCount);
+
+    /** 2. Get whole table data */
+
+    ////*[@id="table1"]/tbody/tr[2]/td[4]
+    ///html/body/div[2]/div/div/table[1]/tbody/tr[2]/td[4]
+
+    /** 3. Get single row [based on a condition] */
+    // let array = [];
+    //
+    // for (let i = 0; i < rowCount; i++) {
+    //
+    //     let personObj = {
+    //         lastName: '',
+    //         firstName: '',
+    //         email: '',
+    //         due: '',
+    //         web: ''
+    //     }
+    //
+    //     for (let j = 0; j < colCount; j++) {
+    //
+    //         let cellValue = await $(`//table[@id="table1"]/tbody/tr[${i+1}]/td[${j+1}]`).getText();
+    //         let firstName = await $(`//table[@id="table1"]/tbody/tr[${i+1}]/td[2]`).getText();
+    //
+    //         if (firstName === 'Jason' || firstName === 'John'){
+    //             if (j===0) personObj.lastName = cellValue;
+    //             if (j===1) personObj.firstName = cellValue;
+    //             if (j===2) personObj.email = cellValue;
+    //             if (j===3) personObj.due = cellValue;
+    //             if (j===4) personObj.web = cellValue;
+    //         }
+    //     }
+    //     if (personObj.firstName){
+    //         array.push(personObj);
+    //     }
+    // }
+    //
+    // console.log(`Whole table: ${JSON.stringify(array)}`)
+
+    ////*[@id="table1"]/tbody/tr[4]/td[3]
+    //*[@id="table1"]/tbody/tr[4]/td[1]
+    /** 4. Get single column */
+
+    /** 5. Get single cell value [based on another cell] */
+
+    // let arr = [];
+    //
+    // for (let i = 0; i < rowCount; i++) {
+    //
+    //         // const cellValue = await $(`//table[@id='table1']/tbody/tr[${i + 1}]/td[${j+1}]`).getText();
+    //         const price = await $(`//table[@id='table1']/tbody/tr[${i + 1}]/td[4]`).getText();
+    //         const firstName = await $(`//table[@id='table1']/tbody/tr[${i + 1}]/td[2]`).getText();
+    //
+    //         const actualPrice = +(price.replace('$', ''));
+    //
+    //         if (actualPrice > 50){
+    //             arr.push(firstName);
+    //         }
+    // }
+    // console.log(`>> Single col values: ${arr}`);
+
+
+    /**
+     * SCROLLING
+     *
+     * Visible portion
+     * windows object:
+     * 1. scrollBy
+     * Y -> [-]window.innerHeight
+     */
+    // Scroll down один розмір екрана
+
+    // await browser.execute(()=> {
+    //     window.scrollBy(0, window.innerHeight)
+    // })
+    //
+    // await browser.pause(2000);
+
+    // Scroll top один розмір екрана
+
+    // await browser.execute(()=> {
+    //     window.scrollBy(0, -window.innerHeight)
+    // })
+
+    //scroll to bottom
+    // await browser.pause(2000);
+    await browser.execute(()=> {
+        window.scrollTo(0, document.body.scrollHeight);
+    })
+
+    await browser.pause(2000);
+
+
+    await browser.execute(()=> {
+        window.scrollTo(0, document.body.scrollTop)
+    })
     await browser.debug();
 
 

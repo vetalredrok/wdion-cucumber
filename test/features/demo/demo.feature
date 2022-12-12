@@ -1,6 +1,6 @@
 Feature: Demo feature
 
-
+  @demo @smoke
   Scenario Outline: Run first demo feature
     Given Google page is opened
     When I agree to the cookie policy
@@ -9,5 +9,5 @@ Feature: Demo feature
     Then URL should match <ExpectedURL>
 
     Examples:
-      |TestID  |SearchItem |ExpectedURL|
-      | Demo_TC001 |WDIO   |https://webdriver.io/|
+      | TestID     | SearchItem | ExpectedURL           |
+      | Demo_TC001 | WDIO       | https://webdriver.io/ |
